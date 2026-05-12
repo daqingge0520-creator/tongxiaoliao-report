@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>同校聊产品观察与转型建议</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14161a;
+    --ink-soft: #3a3d42;
+    --ink-mute: #74777d;
+    --ink-faint: #9a9ea4;
+    --line: #e4e4e0;
+    --line-soft: #eeeeea;
+    --paper: #fdfdfa;
+    --paper-soft: #f7f5ef;
+    --paper-warm: #f4efe4;
+    --accent: #9b2c2c;
+    --accent-soft: #f6ebe8;
+    --accent-line: #c29c9a;
+    --warn: #8a6d0a;
+    --warn-soft: #f6eecf;
+    --good: #2d5a3d;
+    --good-soft: #e6ede6;
+    --shadow-xs: 0 1px 0 rgba(20, 22, 26, 0.03);
+    --shadow-sm: 0 1px 3px rgba(20, 22, 26, 0.04), 0 1px 2px rgba(20, 22, 26, 0.03);
+    --shadow-md: 0 4px 14px rgba(20, 22, 26, 0.05), 0 1px 3px rgba(20, 22, 26, 0.04);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: 15.5px;
+    letter-spacing: 0.005em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: var(--paper-warm); color: var(--ink); }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+
+  /* Document header */
+  .doc-header {
+    padding: 80px 0 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 56px;
+    position: relative;
+  }
+  .doc-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0;
+    width: 56px; height: 2px;
+    background: var(--accent);
+  }
+  .doc-meta {
+    font-size: 12px; color: var(--ink-mute);
+    margin-bottom: 28px;
+    display: flex; gap: 14px; flex-wrap: wrap;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .doc-meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .doc-meta .sep { color: var(--line); }
+  h1 {
+    font-family: 'Noto Serif SC', Georgia, serif;
+    font-size: 38px; line-height: 1.3;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .doc-lead {
+    font-size: 17px; line-height: 1.75;
+    color: var(--ink-soft);
+    max-width: 720px;
+    font-weight: 400;
+  }
+  .doc-lead strong { color: var(--ink); font-weight: 600; }
+
+  /* TOC */
+  .toc {
+    background: var(--paper-soft);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 28px 32px;
+    margin-bottom: 72px;
+    position: relative;
+  }
+  .toc::before {
+    content: '';
+    position: absolute;
+    top: 20px; left: -1px;
+    width: 2px; height: 28px;
+    background: var(--accent);
+  }
+  .toc-title {
+    font-size: 11px; font-weight: 700;
+    color: var(--ink-mute);
+    letter-spacing: 0.18em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .toc ol {
+    list-style: none; padding: 0;
+    counter-reset: toc;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 32px;
+  }
+  .toc ol li {
+    counter-increment: toc;
+    padding: 7px 0;
+    display: flex; gap: 14px;
+    font-size: 14px;
+    align-items: baseline;
+  }
+  .toc ol li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: 'Inter', monospace;
+    font-size: 11px; color: var(--ink-faint);
+    min-width: 22px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .toc a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color .2s, border-color .2s;
+    padding-bottom: 1px;
+  }
+  .toc a:hover {
+    color: var(--accent);
+    border-color: var(--accent-line);
+  }
+
+  /* Section */
+  section {
+    padding-bottom: 72px;
+    border-bottom: 1px solid var(--line-soft);
+    margin-bottom: 56px;
+  }
+  section:last-of-type { border-bottom: none; }
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px; font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--accent);
+  }
+  h2 {
+    font-family: 'Noto Serif SC', Georgia, serif;
+    font-size: 28px; line-height: 1.35;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  h3 {
+    font-size: 18px; line-height: 1.45;
+    font-weight: 700;
+    margin-top: 36px;
+    margin-bottom: 14px;
+    color: var(--ink);
+    letter-spacing: -0.002em;
+  }
+  h4 {
+    font-size: 15px; line-height: 1.5;
+    font-weight: 600;
+    margin-top: 22px;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  p {
+    margin-bottom: 18px;
+    color: var(--ink-soft);
+  }
+  p strong { color: var(--ink); font-weight: 600; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-line); transition: background .15s; }
+  a:hover { background: var(--accent-soft); }
+
+  ul, ol { margin: 0 0 18px 0; padding-left: 22px; color: var(--ink-soft); }
+  ul li, ol li { margin-bottom: 8px; line-height: 1.72; }
+  ul li strong, ol li strong { color: var(--ink); font-weight: 600; }
+  ul li::marker { color: var(--ink-faint); }
+  ol li::marker { color: var(--ink-mute); font-variant-numeric: tabular-nums; }
+
+  /* Numbered item */
+  .item {
+    border-top: 1px solid var(--line-soft);
+    padding: 28px 0;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 20px;
+  }
+  .item:first-of-type { border-top: 1px solid var(--line); }
+  .item:last-of-type { border-bottom: 1px solid var(--line-soft); margin-bottom: 12px; }
+  .item-num {
+    font-family: 'Inter', monospace;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink-faint);
+    padding-top: 3px;
+    letter-spacing: 0.08em;
+  }
+  .item h3 { margin-top: 0; }
+  .item-body { }
+  .note {
+    font-size: 13.5px;
+    background: var(--warn-soft);
+    border-left: 2px solid var(--warn);
+    padding: 12px 16px;
+    margin-top: 14px;
+    color: var(--ink-soft);
+    border-radius: 0 3px 3px 0;
+    line-height: 1.65;
+  }
+  .note strong { color: var(--ink); }
+  .note.red { background: var(--accent-soft); border-left-color: var(--accent); }
+  .note.green { background: var(--good-soft); border-left-color: var(--good); }
+
+  /* Callout */
+  .callout {
+    background: var(--paper-soft);
+    padding: 28px 32px;
+    margin: 32px 0;
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--ink);
+    position: relative;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-xs);
+  }
+  .callout::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: -1px;
+    width: 3px;
+    background: var(--ink);
+  }
+  .callout strong { font-weight: 700; }
+
+  /* Table */
+  .table-wrap {
+    margin: 24px 0;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--paper);
+    box-shadow: var(--shadow-sm);
+  }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+  th {
+    background: var(--paper-soft);
+    font-weight: 600;
+    font-size: 11.5px;
+    color: var(--ink);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #fafaf7; }
+  tr.focus td { background: var(--paper-warm); font-weight: 500; }
+  tr.focus:hover td { background: var(--paper-warm); }
+  td.num { text-align: center; }
+  .score { letter-spacing: 1.5px; font-size: 12px; font-family: 'Inter', monospace; }
+  .score .on { color: var(--accent); }
+  .score .off { color: var(--line); }
+
+  /* Phase */
+  .phase {
+    padding: 28px 32px;
+    background: var(--paper);
+    border-radius: 3px;
+    margin-bottom: 16px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-xs);
+    position: relative;
+    transition: box-shadow .2s;
+  }
+  .phase:hover { box-shadow: var(--shadow-md); }
+  .phase::before {
+    content: '';
+    position: absolute;
+    top: 24px; left: -1px;
+    width: 3px; height: 24px;
+    background: var(--accent);
+  }
+  .phase .time {
+    font-family: 'Inter', monospace;
+    font-size: 11.5px; font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .phase h3 { margin-top: 0; margin-bottom: 10px; font-size: 17px; }
+  .phase p { font-size: 14.5px; margin-bottom: 14px; line-height: 1.7; }
+  .phase .goals {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+  }
+  .phase .goals div { font-size: 13.5px; color: var(--ink); }
+  .phase .goals strong {
+    display: block;
+    font-size: 10.5px;
+    color: var(--ink-mute);
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Source cite */
+  sup.cite {
+    font-size: 10px;
+    color: var(--accent);
+    margin-left: 2px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 96px;
+    padding: 40px 0 72px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    background: var(--paper-soft);
+  }
+  footer h4 {
+    font-size: 11.5px;
+    margin-bottom: 16px;
+    color: var(--ink);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  footer ol { padding-left: 20px; margin-bottom: 16px; font-size: 12.5px; }
+  footer ol li { margin-bottom: 6px; line-height: 1.6; }
+  footer a {
+    color: var(--ink-soft);
+    word-break: break-all;
+    border-bottom: none;
+  }
+  footer a:hover { color: var(--accent); background: transparent; }
+
+  /* Print */
+  @media print {
+    body { background: white; font-size: 12px; }
+    .toc { page-break-after: always; background: white; border: 1px solid #ccc; }
+    section { page-break-inside: avoid; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 18px; }
+    .container { max-width: 100%; padding: 0; }
+    .phase:hover, tbody tr:hover td { box-shadow: none; background: inherit; }
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    body { font-size: 15px; line-height: 1.7; }
+    .container { padding: 0 18px; }
+    h1 { font-size: 28px; line-height: 1.3; }
+    h2 { font-size: 22px; }
+    h3 { font-size: 16.5px; }
+    .phase .goals { grid-template-columns: 1fr; }
+    .doc-header { padding: 48px 0 28px; margin-bottom: 40px; }
+    .toc { padding: 20px 22px; margin-bottom: 48px; }
+    .toc ol { grid-template-columns: 1fr; gap: 0; }
+    .callout { padding: 20px 22px; font-size: 15px; }
+    .phase { padding: 22px 24px; }
+    th, td { padding: 9px 10px; font-size: 12px; }
+    .item { grid-template-columns: 36px 1fr; gap: 14px; padding: 22px 0; }
+    .keyfacts { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .keyfact .num { font-size: 30px; }
+    .shift-diagram { grid-template-columns: 1fr; gap: 16px; }
+    .shift-arrow { transform: rotate(90deg); padding: 8px 0; }
+    .opp-map { grid-template-columns: 1fr 1fr; }
+    .stack-layer { padding: 18px 22px; }
+    .stack-layer h4 { font-size: 15px; }
+    .pullstat { font-size: 34px; }
+  }
+
+  /* ============ 视觉元素 ============ */
+
+  /* Key Facts 大数字卡片组 */
+  .keyfacts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px dashed var(--line);
+  }
+  .keyfact {
+    padding: 4px 0;
+  }
+  .keyfact .num {
+    font-family: 'Noto Serif SC', Georgia, serif;
+    font-size: 40px;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .keyfact .num .plus {
+    color: var(--accent);
+    font-size: 0.6em;
+    vertical-align: super;
+  }
+  .keyfact .num .unit {
+    font-size: 0.45em;
+    color: var(--ink-mute);
+    font-weight: 500;
+    margin-left: 2px;
+    letter-spacing: 0;
+  }
+  .keyfact .label {
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  /* 章节间分隔符 */
+  .ornament {
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 18px;
+    letter-spacing: 1.2em;
+    margin: 40px 0 24px;
+    padding-right: 0;
+    user-select: none;
+  }
+
+  /* 定位转变图 */
+  .shift-diagram {
+    display: grid;
+    grid-template-columns: 1fr 48px 1fr;
+    gap: 20px;
+    align-items: center;
+    margin: 32px 0 8px;
+  }
+  .shift-col {
+    background: var(--paper-soft);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow-xs);
+  }
+  .shift-col .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-mute);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .shift-col .label::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+  }
+  .shift-col.after .label { color: var(--accent); }
+  .shift-col.after .label::before { background: var(--accent); }
+  .shift-col ul {
+    list-style: none; padding: 0; margin: 0;
+  }
+  .shift-col ul li {
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--ink-soft);
+    margin-bottom: 0;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .shift-col ul li:last-child { border-bottom: none; }
+  .shift-col ul li::before {
+    content: '—';
+    color: var(--ink-faint);
+    flex-shrink: 0;
+  }
+  .shift-col.after ul li::before { color: var(--accent); }
+  .shift-col .subtle {
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    font-style: italic;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+  }
+  .shift-arrow {
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 22px;
+  }
+
+  /* 场景机会地图 */
+  .opp-map {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 28px 0 8px;
+  }
+  .opp-cell {
+    padding: 16px 18px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    position: relative;
+    box-shadow: var(--shadow-xs);
+  }
+  .opp-cell .flag {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .opp-cell .flag::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+  }
+  .opp-cell .scene {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .opp-cell .note {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    line-height: 1.55;
+  }
+  .opp-cell.red { border-left: 3px solid #b44; background: #fbf5f5; }
+  .opp-cell.red .flag { color: #884444; }
+  .opp-cell.red .flag::before { background: #b44; }
+  .opp-cell.yellow { border-left: 3px solid #b89030; background: #fbf8ee; }
+  .opp-cell.yellow .flag { color: #8a6d0a; }
+  .opp-cell.yellow .flag::before { background: #b89030; }
+  .opp-cell.green { border-left: 3px solid #4a7a5a; background: #f3f7f3; }
+  .opp-cell.green .flag { color: #3a5c46; }
+  .opp-cell.green .flag::before { background: #4a7a5a; }
+
+  /* 产品三层结构图 */
+  .stack {
+    margin: 32px 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+  }
+  .stack-layer {
+    padding: 22px 28px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--paper);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 20px;
+    box-shadow: var(--shadow-xs);
+    position: relative;
+  }
+  .stack-layer::before {
+    content: '';
+    position: absolute;
+    top: 22px; left: -1px;
+    width: 3px; height: 20px;
+  }
+  .stack-layer.front::before { background: #b89030; }
+  .stack-layer.mid::before { background: var(--accent); }
+  .stack-layer.back::before { background: #4a7a5a; }
+  .stack-layer h4 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .stack-layer p {
+    font-size: 13.5px;
+    color: var(--ink-mute);
+    margin: 0;
+    line-height: 1.55;
+  }
+  .stack-layer .tag {
+    font-family: 'Inter', monospace;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ink-mute);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    background: var(--paper-soft);
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .stack-layer.front .tag { color: #8a6d0a; background: #fbf8ee; }
+  .stack-layer.mid .tag { color: var(--accent); background: var(--accent-soft); }
+  .stack-layer.back .tag { color: #3a5c46; background: #f3f7f3; }
+  .stack-arrow {
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 0;
+  }
+
+  /* Pull quote 大数字 */
+  .pullstat-wrap {
+    margin: 36px 0;
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+  }
+  .pullstat {
+    font-family: 'Noto Serif SC', Georgia, serif;
+    font-size: 54px;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .pullstat-label {
+    font-size: 13px;
+    color: var(--ink-soft);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header class="doc-header">
+  <div class="doc-meta">
+    <span>产品观察</span>
+    <span class="sep">·</span>
+    <span>同校聊 App</span>
+    <span class="sep">·</span>
+    <span>2026 年 5 月</span>
+  </div>
+  <h1>同校聊现在最该解决的问题，<br>不是功能不够，是目标太多</h1>
+  <p class="doc-lead">
+    这份文档基于一次完整的 App 体验、对大学生目前实际在用的软件做的梳理、以及对国内外 8 款同类产品的拆解。要说清楚四件事：现在产品哪里卡住了、大学生的时间都被哪些软件占掉了、国内外类似产品已经走通了什么路、如果只做一件最值得做的事，这件事是什么，第一个月能做到什么。
+  </p>
+
+  <div class="keyfacts">
+    <div class="keyfact">
+      <span class="num">2,700<span class="plus">+</span></span>
+      <div class="label">全国高校数量<br>其中绝大多数在选课 / 真题 / 课评方面处于信息真空</div>
+    </div>
+    <div class="keyfact">
+      <span class="num">8<span class="unit">款</span></span>
+      <div class="label">同类对标产品拆解<br>国内外 AI 求职 + 校园方向</div>
+    </div>
+    <div class="keyfact">
+      <span class="num">6<span class="unit">条</span></span>
+      <div class="label">已识别的结构性问题<br>共同指向"目标太多"</div>
+    </div>
+    <div class="keyfact">
+      <span class="num">12<span class="unit">月</span></span>
+      <div class="label">分三阶段落地路线<br>第一个月只做假设验证</div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="toc-title">目录</div>
+  <ol>
+    <li><a href="#s1">现在遇到的六个问题</a></li>
+    <li><a href="#s2">为什么现在做得更吃力</a></li>
+    <li><a href="#s2b">大学生现在实际在用什么软件</a></li>
+    <li><a href="#s3">国内外已经走通的几条路</a></li>
+    <li><a href="#s4">建议的转型方向：大学生找工作的 AI 助手</a></li>
+    <li><a href="#s5">配套保留：现有社区改成 AI 搭子匹配</a></li>
+    <li><a href="#s6">真正能立住的事：深度数据源 + 学校级 AI</a></li>
+    <li><a href="#s7">12 个月怎么做</a></li>
+    <li><a href="#s8">这份方案靠什么成立：关键假设和验证</a></li>
+    <li><a href="#s9">第一个月具体做什么</a></li>
+  </ol>
+</nav>
+
+<!-- 1 -->
+<section id="s1">
+  <div class="section-label">第 1 节</div>
+  <h2>现在遇到的六个问题</h2>
+  <p>以下是打开 App 后、在不同 Tab 切换时看到的问题。都是表象，但这六个表象指向的是同一个底层问题——产品在同时做小红书、大学生社区、求职服务聚合三件事，每件都没做进去。</p>
+
+  <div class="item">
+    <div class="item-num">01</div>
+    <div class="item-body">
+      <h3>首页内容没有大学生的标识度</h3>
+      <p>种草首页看到的是"女大学生低成本租房养猫""学习""分享生活"这类话题。这些选题在小红书上有海量内容，用户没有理由从小红书切过来。</p>
+      <div class="note">看到的证据：首页"热门"栏目 4 条内容，点赞数都是 0。</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-num">02</div>
+    <div class="item-body">
+      <h3>内容没起来，用户就没在这里停留的理由</h3>
+      <p>大学生的社交关系已经在微信、QQ、小红书、B 站，让他们再搬一次家的门槛很高。人人网、超级课程表、11 点 11 分都是前车之鉴。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-num">03</div>
+    <div class="item-body">
+      <h3>就业 Tab 的入口太多，用户反而不知道先用哪个</h3>
+      <p>AI 规划、AI 面试、简历模板、面经、央国企招聘、考公考编、大厂招聘、实习、留学、简历优化、面试辅导……十几个入口并列摆在一页，用户第一次进来找不到主线。</p>
+      <div class="note red"><strong>更矛盾的是：</strong>页面最下方又直接链接到 Boss 直聘、智联招聘、应届生求职网。好不容易获取来的用户，又被自己导流出去。</div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-num">04</div>
+    <div class="item-body">
+      <h3>同校 Tab 的内容刷不出来</h3>
+      <p>选择重庆理工大学进去，热帖榜前三围观量是 0.59w、0.47w、0.27w，对一个校园社区来说太冷清。主动态列表停在"正在加载数据"。</p>
+      <p>顶部挂着"2026 届毕业生简历大赛"横幅——团队知道需要活动驱动，但活动本身没办法带来日常留存。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-num">05</div>
+    <div class="item-body">
+      <h3>AI 只是做成了一个个小按钮</h3>
+      <p>就业 Tab 里有"AI 规划"和"AI 面试"两个入口，和"简历模板""考公考编"并排放在九宫格里，大小一样，没有特别的位置。</p>
+      <p>这是现在很多团队做 AI 产品时容易犯的同一个毛病：把 AI 当成一个新功能塞进旧产品，而不是用 AI 把这件事重新做一遍。Perplexity 没有在搜索框旁加一个"AI 搜索"按钮，它整个产品就是 AI 做的搜索。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-num">06</div>
+    <div class="item-body">
+      <h3>用户还没多，收钱的入口先铺好了</h3>
+      <p>"我的"Tab 里已经有四个入口：开通同校、工作台、我的钱包、会员管理。这意味着团队做了四种赚钱方式的铺垫，但用户规模没支撑住其中任何一个。</p>
+      <div class="note">这种情况下，任何一条都做不起来，还会让用户觉得产品"着急变现"。</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    把这六个问题放在一起看，根本原因是<strong>产品在同时做三件事，但只能做好一件</strong>。种草、校园社区、求职聚合，每一个都有已经做得很成熟的对手。不收拢到一件事上去深挖，情况很难改变。
+  </div>
+
+  <div class="shift-diagram">
+    <div class="shift-col">
+      <div class="label">现在的产品结构</div>
+      <ul>
+        <li>种草 Tab：对标小红书</li>
+        <li>同校 Tab：对标校园社区</li>
+        <li>就业 Tab：功能堆砌 + 外导流量</li>
+      </ul>
+      <div class="subtle">三线并行，彼此不互补，资源分散</div>
+    </div>
+    <div class="shift-arrow">→</div>
+    <div class="shift-col after">
+      <div class="label">建议的产品结构</div>
+      <ul>
+        <li>主线：找工作 AI 助手（收入）</li>
+        <li>配套：社区改成 AI 搭子匹配</li>
+        <li>后端：本校深度数据（壁垒）</li>
+      </ul>
+      <div class="subtle">一条主线带两个配套，共享同一份用户画像</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+  <div class="section-label">第 2 节</div>
+  <h2>为什么现在做得更吃力</h2>
+  <p>有三件事在同时发生，让"把很多功能塞进一个 App"这条路变得比 2-3 年前更难走。</p>
+
+  <h3>一、用户不再需要一个"聚合型 App"</h3>
+  <p>过去把多个服务放在一个 App 里有明确的好处——用户懒得装多个 App。现在用户已经习惯在一个对话框里提问，让 AI 帮他完成跨应用的事。"把很多事塞进一个 App"反而会让这个 App 看起来每件事都做得浅。</p>
+
+  <h3>二、AI 生成的内容泛滥，用户变挑剔</h3>
+  <p>看到首页那几张图——花丛小院、金鱼配心灵鸡汤——很明显是 AI 生成的。在 2023 年这种图是装饰，2026 年用户会直接划走。对社区类产品来说，内容质量的信任门槛比以前高得多。</p>
+
+  <h3>三、做个"AI 功能"本身已经没门槛</h3>
+  <p>"AI 规划""AI 面试"这样的功能，现在任何一个开发者用 Kimi、DeepSeek、豆包的 API 一天就能搭起来。能不能做出来已经不是护城河，<strong>能不能做得比通用 AI 更懂用户、更懂行业，才是护城河。</strong></p>
+</section>
+
+<!-- 2b -->
+<section id="s2b">
+  <div class="section-label">第 3 节 · 用户使用场景调研</div>
+  <h2>大学生现在实际在用什么软件</h2>
+  <p>在讨论"同校聊应该做什么"之前，要先看清楚一个事实：大学生的时间已经被现有软件分得很细。要挤进去，必须先知道每一块是谁在占。以下是基于公开信息和行业常识的梳理（没有官方活跃数据，部分是定性判断，供参考）。</p>
+
+  <h3>按场景分，大学生每天在用的软件</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:100px;">场景</th>
+          <th>主要使用的软件</th>
+          <th>同校聊可切入的缝隙</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>日常社交</strong></td>
+          <td>微信、QQ（仍是大学生 QQ 群最活跃人群之一）</td>
+          <td>几乎切不进去。做社交替代是死路。</td>
+        </tr>
+        <tr>
+          <td><strong>看内容 / 种草</strong></td>
+          <td>小红书、B站、抖音、微博</td>
+          <td>切不进去。做"垂直小红书"基本没戏。</td>
+        </tr>
+        <tr>
+          <td><strong>学习 / 课程</strong></td>
+          <td>超星学习通（网课、作业）、雨课堂（课堂签到互动）、中国大学 MOOC、学校自己的教务系统</td>
+          <td>学习通口碑差但几乎每个大学都强制用，用户痛苦但逃不掉——这里有机会。</td>
+        </tr>
+        <tr>
+          <td><strong>找资料 / 刷题</strong></td>
+          <td>校园贴吧、QQ 群文件、学长学姐私传资料、淘宝买真题、OCS 网课助手（刷网课）</td>
+          <td>这是最分散、最低效的一块。如果能把一所学校的"历年真题 + 课程资料"聚拢起来，会有人离不开。</td>
+        </tr>
+        <tr>
+          <td><strong>选课 / 看老师给分</strong></td>
+          <td>超级课程表已基本失守；北大未名 BBS、清华树洞、南大 NJU-YYETS 等个别顶校有自己的 BBS；绝大部分学校只能靠学长学姐私下打听</td>
+          <td>全国 2700 多所高校里，只有顶尖几所有自己的课评系统。<strong>绝大多数学校是真空状态。</strong></td>
+        </tr>
+        <tr>
+          <td><strong>校园树洞 / 匿名吐槽</strong></td>
+          <td>清华树洞、北大树洞、复旦树洞（少数学校有）；绝大多数学校依赖微信匿名小号或贴吧</td>
+          <td>有需求，但做树洞类产品风险高（内容审核、校方态度）。</td>
+        </tr>
+        <tr>
+          <td><strong>二手 / 搭子</strong></td>
+          <td>闲鱼、微信群、小红书、"同校聊"这类小 App</td>
+          <td>有机会，但一定要附着在用户每天打开的主场景上，不能独立存在。</td>
+        </tr>
+        <tr>
+          <td><strong>找工作 / 实习</strong></td>
+          <td>Boss 直聘、牛客、小红书（经验帖）、学长学姐微信、OfferShow、超级简历</td>
+          <td>有机会。AI 原生 + 深度数据 + 全过程覆盖这个位置目前空着。</td>
+        </tr>
+        <tr>
+          <td><strong>校园生活服务</strong></td>
+          <td>学校自己的"i××大""××校园"App（校园卡、宿舍报修、图书馆）、美团、拼多多</td>
+          <td>切不进去，且没必要切。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>从这张表能看到的几件事</h3>
+
+  <div class="opp-map">
+    <div class="opp-cell red">
+      <div class="flag">切不进去</div>
+      <div class="scene">日常社交</div>
+      <div class="note">微信、QQ 已占据</div>
+    </div>
+    <div class="opp-cell red">
+      <div class="flag">切不进去</div>
+      <div class="scene">看内容 / 种草</div>
+      <div class="note">小红书、B 站、抖音</div>
+    </div>
+    <div class="opp-cell red">
+      <div class="flag">切不进去</div>
+      <div class="scene">校园生活服务</div>
+      <div class="note">学校官方 App + 美团拼多多</div>
+    </div>
+    <div class="opp-cell yellow">
+      <div class="flag">有机会但风险高</div>
+      <div class="scene">学习 / 课程</div>
+      <div class="note">学习通强制但口碑差</div>
+    </div>
+    <div class="opp-cell yellow">
+      <div class="flag">有机会但风险高</div>
+      <div class="scene">校园树洞</div>
+      <div class="note">内容审核 / 校方态度</div>
+    </div>
+    <div class="opp-cell yellow">
+      <div class="flag">依附主产品才有效</div>
+      <div class="scene">二手 / 搭子</div>
+      <div class="note">独立做没跑通过</div>
+    </div>
+    <div class="opp-cell green">
+      <div class="flag">这里有空间</div>
+      <div class="scene">找资料 / 刷题</div>
+      <div class="note">真题课件极度分散</div>
+    </div>
+    <div class="opp-cell green">
+      <div class="flag">这里有空间</div>
+      <div class="scene">选课 / 看老师</div>
+      <div class="note">2700 所高校真空区</div>
+    </div>
+    <div class="opp-cell green">
+      <div class="flag">这里有空间</div>
+      <div class="scene">找工作 / 实习</div>
+      <div class="note">AI 原生 + 深度数据空位</div>
+    </div>
+  </div>
+
+  <h4>一、大学生每天打开最多的软件，不是他们最满意的软件</h4>
+  <p>学习通、学校教务系统、OCS 刷网课脚本——这些是"被迫用"的。学生对这类工具的满意度很低，但替代品没有。这里面藏着产品机会，但需要正面和学校体系打交道，难度高。</p>
+
+  <h4>二、选课、看老师、找真题这三件事，绝大多数学校处于"真空状态"</h4>
+  <p>只有清北复交这些顶尖学校有自己的 BBS 或树洞沉淀了这些信息。全国 2700 多所高校里，绝大部分学生要么靠贴吧、要么靠加学长微信、要么花钱在淘宝买真题。<strong>这是最有可能做起来的一块——因为没有强对手，而用户需求非常刚性。</strong></p>
+
+  <h4>三、大学生的"社交需求"已经被微信吃掉，但"信息需求"没被满足</h4>
+  <p>让大学生再装一个社交 App 很难。但让大学生为了"找到本校历年真题""看老师给分怎么样""看 XX 系今年招聘情况"而装一个信息类 App，可行性高得多。</p>
+
+  <div class="callout">
+    这张表想说明的核心判断是：<strong>"同校聊"现在想做社交和种草，是在和微信、小红书正面打——几乎不可能赢。但如果把产品重心移到"深度数据聚合 + AI 问答"上，等于是在全国 2700 多所普通高校的"信息真空区"做事。对手是涣散的贴吧和私传资料，这一仗能打。</strong>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+  <div class="section-label">第 4 节</div>
+  <h2>国内外已经走通的几条路</h2>
+  <p>在做"如果要转型往哪里转"这个决定之前，先看一下别人已经走到哪里。下表是按五个维度给几款同类产品打分（★ 1-5 分），每款产品后面有一句话说明它的做法和可借鉴的点。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:140px;">产品</th>
+          <th class="num">AI 是否原生</th>
+          <th class="num">校园场景深度</th>
+          <th class="num">独家数据</th>
+          <th class="num">覆盖求职全过程</th>
+          <th class="num">商业模式清晰</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Final Round AI（美国）</td>
+          <td class="num"><span class="score"><span class="on">★★★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★★</span></span></td>
+        </tr>
+        <tr>
+          <td>Yoodli（美国）</td>
+          <td class="num"><span class="score"><span class="on">★★★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★★</span></span></td>
+        </tr>
+        <tr>
+          <td>Prentus / StandOut（美国）</td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+        </tr>
+        <tr>
+          <td>Simplify（美国）</td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+        </tr>
+        <tr>
+          <td>超级简历 WonderCV</td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+        </tr>
+        <tr>
+          <td>OfferShow</td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+        </tr>
+        <tr>
+          <td>牛客 / 面试鸭</td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+        </tr>
+        <tr>
+          <td>面试大师（国内）</td>
+          <td class="num"><span class="score"><span class="on">★★★★</span><span class="off">★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+        </tr>
+        <tr class="focus">
+          <td>同校聊（现状）</td>
+          <td class="num"><span class="score"><span class="on">★</span><span class="off">★★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★★</span><span class="off">★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+          <td class="num"><span class="score"><span class="on">★★</span><span class="off">★★★</span></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:12px;color:var(--ink-mute);margin-top:-8px;">打分为主观估计，用于横向比较。数据来源见文末参考。</p>
+
+  <h3>重点看这几家</h3>
+
+  <h4>Final Round AI（美国）</h4>
+  <p>做求职全过程 AI 辅助——写简历、模拟面试、面试中实时提示。2024 年拿到 688 万美金种子轮<sup class="cite">[1]</sup>。他们自己声称用户超过 1000 万<sup class="cite">[2]</sup>（这个数字只有官方口径，没有第三方验证）。订阅定价 96 美金/月。</p>
+  <p><strong>可学的地方：</strong>做得很宽，从找工作第一步到面试结束都覆盖，用户一旦进来就不容易离开。<strong>不能直接抄的地方：</strong>"面试时偷偷给你提示答案"这个功能在国内招聘场景会被企业反感，HR 圈会抵制。</p>
+
+  <h4>Yoodli（美国）</h4>
+  <p>做口头表达能力训练。用户对着手机说一段话，AI 告诉他"你用了 7 次'其实'、第二段停顿了 8 秒、论点缺乏数据支持"。2025 年 12 月估值 3 亿美金<sup class="cite">[3]</sup>。一开始做 C 端，现在主要收入来自 Google Cloud、Salesforce 这类公司买它做员工培训。</p>
+  <p><strong>可学的地方：</strong>反馈要具体到用户能照着改，而不是一句"答得还可以"。</p>
+
+  <h4>Prentus 和 StandOut（美国）</h4>
+  <p>两家都是把 AI 面试工具卖给大学就业指导中心。学校付费，学生免费用。对学校的卖点不是"AI 厉害"，而是"你们就业中心 5 个老师服务不了 5000 个学生，AI 补这个人手"。</p>
+  <p><strong>可学的地方：</strong>同校聊现有的"开通同校"功能本来就是给校方或机构入驻用的，这个机制可以直接用来给学校就业中心做 SaaS 版本。</p>
+
+  <h4>Simplify（美国）</h4>
+  <p>浏览器插件 + 网页端，帮用户一键投递岗位，用 AI 自动把简历改成贴合每个 JD 的版本。有一点很聪明：用户在 LinkedIn 或其他招聘网站浏览岗位的时候，插件顺手把 JD 同步到他们服务器。<strong>既帮用户做了事，也拿到了 JD 数据。</strong></p>
+  <p><strong>为什么提它：</strong>"怎么拿到准确的岗位信息"是做求职产品最难的一步（见下文）。Simplify 这种"用户用着用着就把数据给你了"的做法，可能是国内唯一相对可行的路。</p>
+
+  <h4>超级简历 WonderCV（国内）</h4>
+  <p>做得最早的大学生简历工具，现在延伸到了招聘信息聚合。<strong>最大的空子是：</strong>AI 做得比较浅，主要还是模板 + 编辑器，没有"AI 帮你针对每个岗位改一版简历"这种能力。</p>
+
+  <h4>OfferShow（国内）</h4>
+  <p>靠"真实 Offer 数据 + 薪资透明"站住，是大学生最关心的信息之一。<strong>对同校聊的启发：</strong>"独家的真实数据"是社区类产品能立住的一个点。创始人做的那些学长学姐访谈，如果结构化起来，就是同校聊的独家数据。</p>
+
+  <h4>面试大师（国内）</h4>
+  <p>跟 Final Round AI 的做法很像，已经在国内跑。<strong>意味着两件事：</strong>方向是对的（有人在做）；也意味着窗口不会永远开着。</p>
+
+  <div class="callout">
+    把这些放在一起看：<strong>"AI 原生 + 中文大学生 + 全过程覆盖 + 独家的真实访谈数据"</strong>这几个条件同时满足的产品，目前国内外都没有。这就是下面建议的转型方向可以切进去的位置。
+  </div>
+
+  <div class="pullstat-wrap">
+    <span class="pullstat">2,700+</span>
+    <div class="pullstat-label">
+      全国高校数量。除了清北复交等极少数顶校有自己的 BBS，绝大部分学校在选课、真题、课评这些场景是真空的。这是"找工作 AI 助手 + 本校深度数据"这条路最大的机会底盘。
+    </div>
+  </div>
+</section>
+
+</div>
+
+
+<div class="container">
+
+<!-- 4 -->
+<section id="s4">
+  <div class="section-label">第 5 节 · 主要建议</div>
+  <h2>转型方向：做一款帮大学生找工作的 AI 助手</h2>
+  <p>不是在就业 Tab 里再加一个 AI 按钮，是把整个产品收拢成"帮大学生从大二规划到拿 offer"这一件事，其他都围绕这件事转。</p>
+
+  <h3>这款产品要做好三件事</h3>
+
+  <h4>一、让用户把自己讲清楚</h4>
+  <p>用户只填一次基础信息——学校、专业、年级、实习经历、感兴趣的方向、时间安排。越详细，AI 越能帮上忙。</p>
+  <p>这一步不难，但很多同类产品没做好——要么表单太长让用户放弃，要么太简单 AI 没足够信息做判断。要做对，需要用对话式的引导，一点点把用户讲清楚。</p>
+
+  <h4>二、拿到准确的岗位信息（这一步最难）</h4>
+  <p>整个产品能不能跑，卡在这一点上。<strong>没有准确的岗位，后面所有 AI 匹配、简历适配、面试模拟都是空的。</strong></p>
+  <p>目前能想到的三条路，没有一条是轻松的：</p>
+  <ol>
+    <li><strong>做浏览器插件，用户浏览 Boss / 智联 / 拉勾时顺便把 JD 同步过来。</strong>参考 Simplify 的做法。好处是数据新鲜、数量可以堆起来。坏处是：国内招聘网站反爬严格，维护成本高，可能会被封。</li>
+    <li><strong>和几家企业 HR 系统或招聘服务商合作，拿授权数据。</strong>好处是合规、稳定。坏处是谈合作慢，覆盖面窄。</li>
+    <li><strong>人工精选。</strong>前期 1-2 个运营每天整理 50-100 条高质量 JD。好处是最容易启动，质量可控。坏处是数量小，规模化难。</li>
+  </ol>
+  <div class="note red"><strong>现实的做法：</strong>三条路组合起来用——前 3 个月靠人工精选 + 少量插件数据跑通产品，3 个月后再集中精力解决规模化问题。如果连第一步都跑不通，就要重新考虑整个方向。</div>
+
+  <h4>三、AI 要做的事</h4>
+  <p>前两件事做好了，AI 才有用武之地。AI 在这款产品里具体做四件事：</p>
+  <ol>
+    <li><strong>一份简历适配多个岗位。</strong>用户维护一份主简历，AI 根据每个 JD 生成一版适配版本，并标出匹配度和薄弱项。这是产品对用户最有感知的价值。</li>
+    <li><strong>全过程陪伴。</strong>大二时问"我该准备什么实习"、大三时问"这份简历怎么改"、大四时问"两个 offer 怎么选"、入职后问"试用期怎么过"——同一个 AI 教练，因为它记得之前的上下文。</li>
+    <li><strong>模拟面试，给具体到能照着改的反馈。</strong>不是"你答得不错"，是"你的回答缺 2 个数据支撑，STAR 里面的 Action 讲得太短，建议这样改……"</li>
+    <li><strong>基于本校真实数据给答案，不是通用话术。</strong>这是同校聊要真正做出差异化的地方——通用 AI（Kimi / 豆包）给你的答案是"你可以这样准备腾讯的面试"，而同校聊的目标是："你们学校过去 3 年去腾讯的 17 个学长，准备方向是 XX；其中 4 人进了 CSIG，面试官偏好是 XX"。<strong>这类答案不是 Prompt 能写出来的，是要靠真实数据支撑的。这份数据从哪来，见第 7 节。</strong></li>
+  </ol>
+
+  <h3>靠什么赚钱</h3>
+  <p>现在能看到的有三条路，按可行性排：</p>
+  <ul>
+    <li><strong>C 端订阅（主要）。</strong>参考对标产品，建议定价月卡 29 / 季卡 79 / 年卡 299。目标是每 100 个免费用户里有 3-5 个付费（5% 以下不要急着规模化）。</li>
+    <li><strong>卖给大学就业指导中心（中期）。</strong>参考 Prentus 的做法。学校这两年被就业率指标压力推着走，有采购意愿。客单价预期几万到十几万一年。周期长但客单高。</li>
+    <li><strong>按次付费的高客单服务（补充）。</strong>比如一对一真人 + AI 联合的 offer 辅导，几百到几千一次，走私域。</li>
+  </ul>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+  <div class="section-label">第 6 节 · 配套方案</div>
+  <h2>现有社区不砍，改成 AI 搭子匹配</h2>
+  <p>种草 Tab 和同校 Tab 没必要关掉。这两个模块做独立产品跑不通，但<strong>作为一款"找工作 AI 助手"下面的配套功能可以发挥作用</strong>——因为主产品积累的用户画像（学校、专业、年级、目标）同时也是搭子匹配需要的信息。</p>
+
+  <h3>具体怎么改</h3>
+  <ol>
+    <li><strong>用户画像沿用主产品的那一份。</strong>用户已经填过了学校、专业、实习经历、目标方向，搭子匹配直接用，不再让用户填一遍。</li>
+    <li><strong>让 AI 主动撮合，而不是靠用户发帖找人。</strong>"你们学校有 3 个人最近在准备同一家公司的校招""你关注过的备考话题，今天有 2 条新动态"。</li>
+    <li><strong>匹配后落到小圈子，而不是直接加微信。</strong>3-10 人的圈子在 App 内沉淀，圈内聊天、分享的内容回流到社区，也能喂回推荐模型。</li>
+  </ol>
+
+  <div class="note"><strong>这个模块不是独立的生意，是用来提高主产品留存的。</strong>独立做搭子匹配的 App 绝大多数都没做起来（人人网、最最、11 点 11 分、早期的 Summer），历史证明了这件事作为独立产品太难。但依附在一款用户已经有动机打开的产品里，它就有机会。</div>
+
+  <h3>这块的判断标准</h3>
+  <ul>
+    <li>60% 以上注册用户填过 5 项以上画像信息</li>
+    <li>搭子推荐的双向接受率超过 20%</li>
+    <li>注册 7 天后还在打开的用户超过 30%</li>
+  </ul>
+  <p>达不到这三个数，说明配套模块的价值不够，要减投入。</p>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+  <div class="section-label">第 7 节 · 真正的差异化</div>
+  <h2>真正能立住的事：深度数据源 + 学校级 AI</h2>
+  <p>到这里必须说清楚一件事：<strong>前面讲的"AI 简历适配""模拟面试""全过程陪伴"——这些功能任何团队用 Kimi / DeepSeek API 都能做。真正能让同校聊在 3 年后还在的，不是这些 AI 功能本身，是它背后积累的深度数据。</strong></p>
+
+  <p>这是和之前方案最大的不同：我之前过于强调"创始人的采访素材"，但那点内容撑不起一个产品的长期差异化——体量太小、更新太慢、覆盖面窄。真正要做的是下面这些数据源。</p>
+
+  <h3>应该建立的四类深度数据源</h3>
+
+  <h4>一、本校历年题库和课程资料</h4>
+  <p>全国 2700 多所高校，绝大部分学生靠 QQ 群文件、学长学姐私传、淘宝买真题来获取历年期末题。这些资料极度分散，但每所学校的学生都需要。</p>
+  <ul>
+    <li><strong>为什么没人做成：</strong>题库归属权模糊（老师的、学校的还是学生自己整理的？）；需要一所学校一所学校收集，没法批量抓。</li>
+    <li><strong>怎么拿：</strong>用"学生上传 → 积分奖励 → AI 自动整理分类"的方式。第一阶段靠人工 + 学生贡献，攒够 5-10 所学校后就能形成一定壁垒。</li>
+    <li><strong>价值：</strong>这是用户真正会"每周打开"的理由——期末考试前，没有哪个学生不想要历年真题。</li>
+  </ul>
+
+  <h4>二、课程评价和老师信息</h4>
+  <p>除了清华北大这些顶尖学校有自己的 BBS 沉淀了课评，绝大多数学校是"靠学长口口相传"。这是一个存在了十几年的刚需，但除了已经式微的超级课程表，没有谁真正把它做起来。</p>
+  <ul>
+    <li><strong>为什么没人做成：</strong>用户贡献动力不足（评价完就走，没有长期使用）；学校可能反感；需要一所学校一所学校的积累。</li>
+    <li><strong>怎么拿：</strong>匿名评价 + 积分激励 + 选课季强运营。用 AI 做结构化（给分严格程度、作业量、课程内容、老师风格四个维度），不要纯文本堆积。</li>
+    <li><strong>价值：</strong>选课季是高频打开节点。</li>
+  </ul>
+
+  <h4>三、本校毕业生的真实去向和求职路径</h4>
+  <p>这是和"找工作 AI 助手"直接打通的一块，也是最有商业价值的数据。"我们学校计算机专业去年 200 个毕业生，XX 人进了互联网大厂、XX 人考公、XX 人考研——他们分别是怎么准备的。"这种数据现在没有任何产品整理过。</p>
+  <ul>
+    <li><strong>为什么没人做成：</strong>数据涉及个人隐私，不能硬抓；需要毕业生愿意分享。</li>
+    <li><strong>怎么拿：</strong>
+      <ul>
+        <li>学生主动填写"我的求职轨迹"（用投简历记录 / 面试记录 / offer 记录换 AI 服务的免费额度）</li>
+        <li>和高校就业指导中心合作，拿脱敏的就业报告数据（这是方向二的核心价值）</li>
+        <li>对已毕业用户做激励式访谈（这部分才是创始人原本访谈素材的真正用法——不是作为 RAG 语料，是作为数据框架的填充源）</li>
+      </ul>
+    </li>
+    <li><strong>价值：</strong>这是 AI 求职助手回答问题的"真实答案"来源，让 Kimi 永远追不上。</li>
+  </ul>
+
+  <h4>四、校园内论坛、树洞、贴吧的内容聚合（可选）</h4>
+  <p>每所学校都有自己的信息沉淀——贴吧、QQ 群讨论、少数学校有树洞或 BBS。这些内容是碎片化的但量很大。</p>
+  <ul>
+    <li><strong>怎么拿：</strong>公开的可以抓，非公开的不能碰。可以用 AI 做语义分类和摘要，让用户能问"XX 老师最近在贴吧被吐槽什么""XX 宿舍楼评价怎样"。</li>
+    <li><strong>风险：</strong>抓取合规性需谨慎，尤其是涉及学校域名的内容。</li>
+  </ul>
+
+  <h3>数据飞轮怎么转起来</h3>
+  <p>这四类数据一旦开始积累，就会形成用户粘性 → 更多用户愿意贡献 → 数据质量上升 → 产品更好用的循环。这个循环一旦跑通，新进入的对手就追不上了。</p>
+  <ol>
+    <li><strong>第一阶段（0-3 个月）：</strong>聚焦 1 所重点学校（创始人有关系的），手工 + 邀请 50-100 个种子用户，积累第一批题库、课评、就业数据。目标不是规模，是验证"用户愿意贡献"和"内容质量能达到用户需要的水平"。</li>
+    <li><strong>第二阶段（3-6 个月）：</strong>扩展到 3-5 所学校，开始自动化（AI 整理用户上传的资料、自动分类归档）。</li>
+    <li><strong>第三阶段（6-12 个月）：</strong>和高校就业指导中心合作，拿脱敏的官方数据填补盲区；扩展到 10+ 所学校。</li>
+  </ol>
+
+  <h3>要面对的现实风险</h3>
+
+  <h4>风险一：题库 / 课评的版权和校方态度</h4>
+  <p>让学生上传真题，学校可能会干预（因为"对外泄露考题"）。课评如果涉及负面，老师和学校也会反感。超级课程表、人人网都撞过这堵墙。</p>
+  <p><strong>对策：</strong>匿名化 + 平台声明"内容由学生自主上传"；主动和 1-2 所合作学校谈成"官方支持的补充学习工具"定位，避免对立关系。</p>
+
+  <h4>风险二：冷启动</h4>
+  <p>没数据就没用户，没用户就没人贡献数据——这个经典死循环。</p>
+  <p><strong>对策：</strong>创始人的采访素材 + 团队手工整理第一批资料，用来"装满第一所学校的空房间"，让第一批用户进来不是看到空壳。</p>
+
+  <h4>风险三：规模化的人力问题</h4>
+  <p>一所学校做深需要运营精力。10 所、100 所怎么办？</p>
+  <p><strong>对策：</strong>前 3 所学校人工密集做；3 所之后大量靠 AI 自动化（用户上传、AI 审核分类、算法推荐）；10+ 所学校之后只做模板化部署。不追求覆盖所有学校。</p>
+
+  <h3>完整的产品分层</h3>
+
+  <div class="stack">
+    <div class="stack-layer front">
+      <div>
+        <h4>前端 · 让用户有付费动机来</h4>
+        <p>找工作 AI 助手。一份简历适配多岗位、模拟面试、全过程陪伴。</p>
+      </div>
+      <span class="tag">获客</span>
+    </div>
+    <div class="stack-arrow">↓</div>
+    <div class="stack-layer mid">
+      <div>
+        <h4>中段 · 让用户愿意继续用</h4>
+        <p>结构化反馈、多轮对话、跨阶段记忆。这部分是 AI 产品基本功。</p>
+      </div>
+      <span class="tag">留存</span>
+    </div>
+    <div class="stack-arrow">↓</div>
+    <div class="stack-layer back">
+      <div>
+        <h4>后端 · 让用户离不开</h4>
+        <p>本校题库、课评、真实就业去向。通用 AI 永远拿不到的差异化来源。</p>
+      </div>
+      <span class="tag">壁垒</span>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>把第 5 节和第 7 节合起来看，完整的产品路径是：</strong>前端是"找工作 AI 助手"让用户有付费动机来——中间是"一份简历适配多岗位 + 结构化面试反馈"这些 AI 功能留住用户——后端是"本校题库、课评、就业去向"这些深度数据让用户长期离不开。三段连成一条路，才有真正的壁垒。
+  </div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+  <div class="section-label">第 8 节 · 路线</div>
+  <h2>12 个月怎么走</h2>
+
+  <div class="phase">
+    <div class="time">第 0-3 个月</div>
+    <h3>先把最小版本跑起来，看用户愿不愿意为它付钱</h3>
+    <p>只做两件事：一份简历 AI 适配多个岗位 + 模拟面试和结构化反馈。种草 / 同校 Tab 加入搭子匹配入口，但不做大规模投入。</p>
+    <div class="goals">
+      <div><strong>用户</strong>1000 付费用户</div>
+      <div><strong>经济</strong>每个付费用户带来的收入 &gt; 获取成本</div>
+      <div><strong>产出</strong>第一版评测集和问题案例库</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="time">第 3-6 个月</div>
+    <h3>主产品扩到更多场景，校园问答开始做单校试点</h3>
+    <p>主产品从"简历 + 面试"扩展到"求职规划 + offer 比较"。开始向 1 所学校的就业指导中心推 SaaS 版本。校园问答挑一所最熟悉的学校做试点。</p>
+    <div class="goals">
+      <div><strong>用户</strong>1 万付费用户</div>
+      <div><strong>学校端</strong>签下第 1 所合作学校</div>
+      <div><strong>试点</strong>1 所学校的问答 Agent 上线</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="time">第 6-12 个月</div>
+    <h3>向更多学校复制，数据闭环真正转起来</h3>
+    <p>校园问答在 3-5 所学校复制。主产品的用户反馈数据回流，让 Prompt 和模型持续变好。创始人的采访内容积累到一定规模，形成其他产品复制不了的差异。</p>
+    <div class="goals">
+      <div><strong>学校</strong>10+ 所合作学校</div>
+      <div><strong>数据</strong>独家采访库规模化</div>
+      <div><strong>品牌</strong>在大学生群体中建立"AI 找工作"的心智</div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+  <div class="section-label">第 9 节 · 假设</div>
+  <h2>这份方案靠什么成立：关键假设和验证</h2>
+  <p>方案写得再好，如果下面几个假设有明显证伪，整个方向就要重新考虑。所以第一个月最重要的事不是做产品，是验证这些假设。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>假设</th>
+          <th style="width:70px;">风险</th>
+          <th>第一个月的验证方式</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>大学生愿意为 AI 求职服务付费 29-299 元</strong><br><span style="font-size:12px;color:var(--ink-mute);">决定 C 端订阅模式能否成立</span></td>
+          <td style="color:var(--accent);font-weight:600;">高</td>
+          <td>找 100 名目标用户试用 30 天，看有没有 5% 以上的付费转化</td>
+        </tr>
+        <tr>
+          <td><strong>岗位信息能通过插件 + 精选组合解决</strong><br><span style="font-size:12px;color:var(--ink-mute);">决定核心功能能否落地</span></td>
+          <td style="color:var(--accent);font-weight:600;">高</td>
+          <td>写一个 Chrome 插件小版本，测在 Boss、智联上的抓取成功率</td>
+        </tr>
+        <tr>
+          <td><strong>AI 改出来的简历用户能接受</strong><br><span style="font-size:12px;color:var(--ink-mute);">决定核心价值能否成立</span></td>
+          <td style="color:var(--warn);font-weight:600;">中</td>
+          <td>准备 30 份真实 JD 和 10 份真实简历，让目标用户盲评 AI 版本 vs 自己改的版本</td>
+        </tr>
+        <tr>
+          <td><strong>能从学生群体持续拿到题库、课评等深度数据</strong><br><span style="font-size:12px;color:var(--ink-mute);">这是产品长期能立住的关键</span></td>
+          <td style="color:var(--accent);font-weight:600;">高</td>
+          <td>选 1 所学校做试点，用积分激励拉 100 个种子用户，看 30 天内能否沉淀 500+ 条有效数据（真题、课评、就业经验）</td>
+        </tr>
+        <tr>
+          <td><strong>大学就业指导中心有买 AI 服务的预算</strong><br><span style="font-size:12px;color:var(--ink-mute);">决定学校端这条路能否走</span></td>
+          <td style="color:var(--warn);font-weight:600;">中</td>
+          <td>约 10 所学校就业中心的主任聊 30 分钟，确认预算和决策流程</td>
+        </tr>
+        <tr>
+          <td><strong>上传真题和课评不会被学校叫停</strong><br><span style="font-size:12px;color:var(--ink-mute);">决定深度数据方向的合规基础</span></td>
+          <td style="color:var(--warn);font-weight:600;">中</td>
+          <td>咨询 2-3 位高校管理层和 1 位教育领域法务，了解红线在哪</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>如果某个假设被证伪了，怎么办</h3>
+
+  <h4>如果付费转化做不到 3%</h4>
+  <p>C 端订阅作为主要收入来源就不成立。可以改成免费工具聚用户，靠学校端合同赚钱。</p>
+
+  <h4>如果抓取 JD 数据被封</h4>
+  <p>放弃大规模自动化，转向和 1-2 家垂直招聘平台谈数据合作 + 人工精选。规模会小，但能跑起来。</p>
+
+  <h4>如果国内对手（比如面试大师）已经抢占了相似定位</h4>
+  <p>收缩战场，只做"大学生"这个群体 + "创始人访谈独家内容"这个差异点，不和通用面试 AI 正面打。</p>
+
+  <h4>如果学生不愿意贡献真题、课评这类深度数据</h4>
+  <p>这是最致命的情况。整个产品后端没有数据支撑，AI 回答只能靠通用模型，差异化会消失。</p>
+  <p><strong>对策：</strong>先收缩战场，只做"找工作 AI 助手"这一段，把深度数据方向延到拿到学校端合作（有官方就业数据来源）再启动。或者改用付费方式买断学长学姐整理好的资料，用钱换冷启动。</p>
+
+  <h4>如果校园问答首校 2 个月做不出可用水平</h4>
+  <p>暂缓这条线，把资源全部回到主产品。校园问答延到 6 个月后再启动，不挡主线。</p>
+</section>
+
+<!-- 9 -->
+<section id="s9">
+  <div class="section-label">第 10 节 · 第一个月</div>
+  <h2>第一个月具体做什么</h2>
+  <p>不做任何新功能上线。这一个月的所有动作都围绕"能不能做得成"这件事做验证。做完之后再决定是全力做、还是调整方向、还是别做。</p>
+
+  <div class="phase">
+    <div class="time">第 1-2 周</div>
+    <h3>了解情况</h3>
+    <p>访谈 20 个目标用户（覆盖 985 / 211 / 双非 / 专科，不同专业和年级），问清楚他们找工作时实际怎么做、用了什么工具、哪些环节最痛。</p>
+    <p>同时盘清同校聊现在的真实数据：DAU、付费、留存、各 Tab 的使用频率。还要盘创始人那些采访素材到底有多少，结构化程度多高。</p>
+  </div>
+
+  <div class="phase">
+    <div class="time">第 3 周</div>
+    <h3>做 4 个小实验，验证 4 个关键假设</h3>
+    <ul style="padding-left:0;list-style:none;">
+      <li>— 付费意愿实验：找 100 个用户试用 30 天版本，看付费</li>
+      <li>— JD 抓取实验：写一个最小 Chrome 插件，看能不能稳定抓到 Boss / 智联的 JD</li>
+      <li>— <strong>深度数据贡献实验：</strong>选 1 所学校建种子群，用积分 / 免费服务换用户上传真题、课评，看 4 周能否沉淀 500 条有效数据</li>
+      <li>— 合规摸底：咨询 2-3 位高校管理层和 1 位法务，明确题库 / 课评的合规红线</li>
+    </ul>
+    <p>三个实验并行，每个都要有明确的继续 / 不继续标准。</p>
+  </div>
+
+  <div class="phase">
+    <div class="time">第 4 周</div>
+    <h3>把前 3 周的结果汇总，决定要不要立项</h3>
+    <p>写一份决策文档：第 0-3 个月的 MVP 功能范围、评测标准、badcase 处理方式、成本估算、团队配置。拿着这份文档做立项决定。</p>
+    <p>如果前面验证都通过了，就启动工程开发。如果某个假设明显不成立，就回到第 5 节重新讨论方向。</p>
+  </div>
+
+  <div class="callout">
+    第一个月看起来"没做什么产品"，但这 4 周决定了后面 11 个月是往正确的方向走还是走偏。<strong>对早期产品来说，做对事比做多事重要。</strong>
+  </div>
+</section>
+
+</div>
+
+<div class="container">
+<footer>
+  <h4>参考资料</h4>
+  <ol>
+    <li>Final Round AI Seed Funding Announcement — DHRmap.com<br><a href="https://www.dhrmap.com/news/final-round-ai-secures-6-88m-in-oversubscribed-seed-funding-to-transform-the-job-search-journey">dhrmap.com/news/final-round-ai-secures-6-88m-in-oversubscribed-seed-funding</a></li>
+    <li>Final Round AI 官网披露用户规模（仅官方口径）— finalroundai.com</li>
+    <li>Yoodli Triples Valuation to $300M — TechCrunch, Dec 2025<br><a href="https://techcrunch.com/2025/12/05/ex-googlers-yoodli-triples-valuation-to-300m-with-ai-built-to-assist-not-replace-people/">techcrunch.com/2025/12/05/ex-googlers-yoodli-triples-valuation-to-300m</a></li>
+    <li>Prentus AI Career Coaching — prentus.com</li>
+    <li>StandOut AI Interview — standout.com</li>
+    <li>WonderCV Crunchbase — crunchbase.com/organization/wondercv</li>
+  </ol>
+  <p style="margin-top:24px;font-size:12px;">本文对 App 的观察基于 2026 年 5 月的产品体验。所有评分为作者主观估计。国内外产品数据尽量引用第三方公开来源；涉及官方口径的用户规模数据已注明。</p>
+</footer>
+</div>
+
+</body>
+</html>
