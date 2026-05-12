@@ -389,28 +389,307 @@
   }
 
   /* Responsive */
-  @media (max-width: 640px) {
-    body { font-size: 15px; line-height: 1.7; }
+  @media (max-width: 768px) {
+    body {
+      font-size: 15px;
+      line-height: 1.7;
+      letter-spacing: 0;
+    }
     .container { padding: 0 18px; }
-    h1 { font-size: 28px; line-height: 1.3; }
-    h2 { font-size: 22px; }
-    h3 { font-size: 16.5px; }
-    .phase .goals { grid-template-columns: 1fr; }
-    .doc-header { padding: 48px 0 28px; margin-bottom: 40px; }
-    .toc { padding: 20px 22px; margin-bottom: 48px; }
-    .toc ol { grid-template-columns: 1fr; gap: 0; }
-    .callout { padding: 20px 22px; font-size: 15px; }
-    .phase { padding: 22px 24px; }
-    th, td { padding: 9px 10px; font-size: 12px; }
-    .item { grid-template-columns: 36px 1fr; gap: 14px; padding: 22px 0; }
-    .keyfacts { grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* 文档头 */
+    .doc-header {
+      padding: 36px 0 24px;
+      margin-bottom: 32px;
+    }
+    .doc-header::after { width: 40px; }
+    .doc-meta {
+      font-size: 10.5px;
+      margin-bottom: 20px;
+      gap: 10px;
+      letter-spacing: 0.04em;
+    }
+    h1 {
+      font-size: 26px;
+      line-height: 1.35;
+      margin-bottom: 18px;
+      letter-spacing: 0;
+    }
+    .doc-lead {
+      font-size: 15.5px;
+      line-height: 1.75;
+    }
+
+    /* 首屏大数字 */
+    .keyfacts {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 16px;
+      margin-top: 28px;
+      padding-top: 24px;
+    }
+    .keyfact .num {
+      font-size: 34px;
+      margin-bottom: 4px;
+    }
+    .keyfact .label {
+      font-size: 11.5px;
+      line-height: 1.45;
+    }
+
+    /* 目录 */
+    .toc {
+      padding: 18px 20px;
+      margin-bottom: 40px;
+      border-radius: 4px;
+    }
+    .toc::before { top: 18px; height: 20px; }
+    .toc-title {
+      font-size: 10.5px;
+      margin-bottom: 12px;
+    }
+    .toc ol {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .toc ol li {
+      padding: 8px 0;
+      font-size: 14px;
+    }
+
+    /* section */
+    section {
+      padding-bottom: 48px;
+      margin-bottom: 36px;
+    }
+    .section-label {
+      font-size: 10px;
+      margin-bottom: 10px;
+    }
+    .section-label::before { width: 14px; }
+    h2 {
+      font-size: 22px;
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+    h3 {
+      font-size: 17px;
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+    h4 {
+      font-size: 14.5px;
+      margin-top: 18px;
+    }
+    p { margin-bottom: 14px; }
+    ul, ol { padding-left: 20px; margin-bottom: 14px; }
+    ul li, ol li { margin-bottom: 6px; line-height: 1.65; }
+
+    /* item */
+    .item {
+      grid-template-columns: 32px 1fr;
+      gap: 12px;
+      padding: 22px 0;
+    }
+    .item-num {
+      font-size: 11.5px;
+      padding-top: 3px;
+    }
+    .item h3 { font-size: 16px; }
+    .item-body p { font-size: 14.5px; }
+    .note {
+      padding: 10px 14px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* callout */
+    .callout {
+      padding: 20px 22px;
+      font-size: 15px;
+      line-height: 1.7;
+      margin: 24px 0;
+    }
+
+    /* shift-diagram 现状→建议 */
+    .shift-diagram {
+      grid-template-columns: 1fr;
+      gap: 0;
+      margin: 24px 0 8px;
+    }
+    .shift-col { padding: 20px 22px; }
+    .shift-col .label {
+      font-size: 10.5px;
+      margin-bottom: 10px;
+    }
+    .shift-col ul li { font-size: 13.5px; padding: 7px 0; }
+    .shift-col .subtle { font-size: 12px; margin-top: 10px; padding-top: 10px; }
+    .shift-arrow {
+      padding: 10px 0;
+      font-size: 20px;
+      line-height: 1;
+      color: var(--accent);
+    }
+    .shift-arrow::before { content: '↓'; }
+    .shift-arrow > * { display: none; }
+
+    /* 机会地图 */
+    .opp-map {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin: 22px 0 8px;
+    }
+    .opp-cell {
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+      border-left-width: 3px;
+    }
+    .opp-cell .flag {
+      font-size: 9.5px;
+      margin-bottom: 0;
+      gap: 5px;
+      white-space: nowrap;
+    }
+    .opp-cell .flag::before {
+      width: 6px; height: 6px;
+    }
+    .opp-cell .scene {
+      font-size: 14px;
+      margin-bottom: 0;
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .opp-cell .note {
+      font-size: 11.5px;
+      text-align: right;
+      grid-column: 3;
+      grid-row: 1;
+      line-height: 1.4;
+    }
+
+    /* 表格：增加滑动提示 */
+    .table-wrap {
+      margin: 20px -18px 20px;
+      border-left: none;
+      border-right: none;
+      border-radius: 0;
+      box-shadow: none;
+      position: relative;
+    }
+    .table-wrap::after {
+      content: '← 左右滑动 →';
+      display: block;
+      text-align: center;
+      font-size: 10.5px;
+      color: var(--ink-faint);
+      padding: 8px 0;
+      border-top: 1px dashed var(--line);
+      letter-spacing: 0.1em;
+    }
+    table { font-size: 12.5px; min-width: 520px; }
+    th {
+      padding: 10px 12px;
+      font-size: 10.5px;
+      letter-spacing: 0.04em;
+    }
+    td {
+      padding: 10px 12px;
+    }
+    tbody tr:hover td { background: inherit; }
+    .score { font-size: 11px; letter-spacing: 1px; }
+
+    /* 三层结构图 */
+    .stack { margin: 24px 0 8px; gap: 6px; }
+    .stack-layer {
+      padding: 18px 20px;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .stack-layer::before {
+      top: 18px; height: 16px;
+    }
+    .stack-layer h4 {
+      font-size: 14.5px;
+      margin-top: 0;
+    }
+    .stack-layer p {
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .stack-layer .tag {
+      font-size: 9.5px;
+      padding: 4px 8px;
+      justify-self: start;
+    }
+    .stack-arrow {
+      font-size: 14px;
+      padding: 0;
+    }
+
+    /* pullstat 大数字 */
+    .pullstat-wrap {
+      margin: 28px 0;
+      padding: 22px 0;
+    }
+    .pullstat {
+      font-size: 42px;
+      margin-bottom: 8px;
+    }
+    .pullstat-label {
+      font-size: 12.5px;
+      padding: 0 8px;
+      line-height: 1.6;
+    }
+
+    /* 阶段卡 */
+    .phase {
+      padding: 20px 22px;
+    }
+    .phase::before { top: 20px; height: 20px; }
+    .phase .time {
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+    }
+    .phase h3 {
+      font-size: 15.5px;
+      margin-top: 0;
+    }
+    .phase p {
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+    .phase .goals {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 14px;
+    }
+    .phase .goals div { font-size: 13px; }
+    .phase .goals strong { font-size: 10px; }
+
+    /* footer */
+    footer {
+      margin-top: 56px;
+      padding: 28px 0 48px;
+      font-size: 11.5px;
+    }
+    footer ol { font-size: 11.5px; }
+  }
+
+  /* 超窄屏 */
+  @media (max-width: 380px) {
+    h1 { font-size: 23px; }
+    h2 { font-size: 20px; }
     .keyfact .num { font-size: 30px; }
-    .shift-diagram { grid-template-columns: 1fr; gap: 16px; }
-    .shift-arrow { transform: rotate(90deg); padding: 8px 0; }
-    .opp-map { grid-template-columns: 1fr 1fr; }
-    .stack-layer { padding: 18px 22px; }
-    .stack-layer h4 { font-size: 15px; }
-    .pullstat { font-size: 34px; }
+    .pullstat { font-size: 36px; }
+    .opp-cell {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .opp-cell .scene { grid-column: 1; }
+    .opp-cell .note { grid-column: 1; text-align: left; }
   }
 
   /* ============ 视觉元素 ============ */
