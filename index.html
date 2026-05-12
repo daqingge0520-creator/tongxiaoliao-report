@@ -539,34 +539,39 @@
       margin: 22px 0 8px;
     }
     .opp-cell {
-      padding: 12px 16px;
+      padding: 14px 16px;
       display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 10px;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 4px 12px;
       border-left-width: 3px;
     }
     .opp-cell .flag {
-      font-size: 9.5px;
-      margin-bottom: 0;
+      font-size: 10px;
+      margin-bottom: 6px;
       gap: 5px;
       white-space: nowrap;
+      grid-column: 1 / -1;
+      grid-row: 1;
     }
     .opp-cell .flag::before {
       width: 6px; height: 6px;
     }
     .opp-cell .scene {
-      font-size: 14px;
+      font-size: 14.5px;
       margin-bottom: 0;
-      grid-column: 2;
-      grid-row: 1;
+      grid-column: 1;
+      grid-row: 2;
+      font-weight: 600;
     }
     .opp-cell .note {
-      font-size: 11.5px;
+      font-size: 12px;
       text-align: right;
-      grid-column: 3;
-      grid-row: 1;
+      grid-column: 2;
+      grid-row: 2;
       line-height: 1.4;
+      color: var(--ink-mute);
+      align-self: center;
     }
 
     /* 表格：增加滑动提示 */
@@ -651,10 +656,12 @@
     .phase .time {
       font-size: 10.5px;
       letter-spacing: 0.12em;
+      line-height: 1.4;
     }
     .phase h3 {
       font-size: 15.5px;
       margin-top: 0;
+      line-height: 1.4;
     }
     .phase p {
       font-size: 13.5px;
@@ -662,12 +669,35 @@
     }
     .phase .goals {
       grid-template-columns: 1fr;
-      gap: 8px;
+      gap: 10px;
       margin-top: 14px;
       padding-top: 14px;
     }
-    .phase .goals div { font-size: 13px; }
-    .phase .goals strong { font-size: 10px; }
+    .phase .goals div {
+      font-size: 13px;
+      line-height: 1.55;
+      padding: 10px 12px;
+      background: var(--paper-soft);
+      border-radius: 3px;
+    }
+    .phase .goals strong {
+      font-size: 10px;
+      margin-bottom: 3px;
+      letter-spacing: 0.1em;
+    }
+    /* phase 内联说明段统一字号 */
+    .phase p[style] {
+      font-size: 12.5px !important;
+      line-height: 1.65 !important;
+      margin-top: 12px !important;
+    }
+
+    /* 第 8 节顶部说明段 */
+    #s7 > .container > p[style],
+    #s7 p[style*="italic"] {
+      font-size: 12.5px !important;
+      line-height: 1.65 !important;
+    }
 
     /* footer */
     footer {
@@ -688,8 +718,13 @@
       grid-template-columns: 1fr;
       gap: 4px;
     }
-    .opp-cell .scene { grid-column: 1; }
-    .opp-cell .note { grid-column: 1; text-align: left; }
+    .opp-cell .scene { grid-column: 1; grid-row: 2; }
+    .opp-cell .note { grid-column: 1; grid-row: 3; text-align: left; margin-top: 2px; }
+    .phase { padding: 18px 18px; }
+    .phase .goals div { padding: 8px 10px; }
+    .table-wrap { margin: 20px -18px; }
+    table { font-size: 11.5px; }
+    th, td { padding: 8px 10px; }
   }
 
   /* ============ 视觉元素 ============ */
@@ -1556,38 +1591,48 @@
 <section id="s7">
   <div class="section-label">第 8 节 · 路线</div>
   <h2>12 个月怎么走</h2>
+  <p style="font-size: 14px; color: var(--ink-mute); margin-top: -8px; margin-bottom: 20px; font-style: italic;">
+    说明：以下三阶段的多数数字是估算，不是第三方公开数据。国内大学生对 AI 求职产品的付费率、高校就业 SaaS 客单价等信息没有公开统计，所以这些目标是"如果假设成立，大致能达到的水平"，而不是行业基准。第一个月的首要任务就是把这些估算变成有数据支撑的判断（见第 9 节和第 10 节）。
+  </p>
 
   <div class="phase">
-    <div class="time">第 0-3 个月</div>
-    <h3>先把最小版本跑起来，看用户愿不愿意为它付钱</h3>
-    <p>只做两件事：一份简历 AI 适配多个岗位 + 模拟面试和结构化反馈。种草 / 同校 Tab 加入搭子匹配入口，但不做大规模投入。</p>
+    <div class="time">第 0-3 个月 · 验证</div>
+    <h3>只做一件事：把 4 条关键假设变成有数据的判断</h3>
+    <p>不追规模。这一阶段产品只开放给 100-300 名真实用户（创始人采访过的学校里的学生，定向邀请），所有动作围绕"用户愿不愿意付钱、岗位数据能不能拿到、学生会不会贡献真题、学校会不会反感"这四件事。</p>
     <div class="goals">
-      <div><strong>用户</strong>1000 付费用户</div>
-      <div><strong>经济</strong>每个付费用户带来的收入 &gt; 获取成本</div>
-      <div><strong>产出</strong>第一版评测集和问题案例库</div>
+      <div><strong>动作 1</strong>做 100 个用户的 30 天付费测试</div>
+      <div><strong>动作 2</strong>Chrome 插件抓 JD 的稳定性测试</div>
+      <div><strong>动作 3</strong>一所学校的 UGC 种子贡献实验</div>
     </div>
+    <p style="margin-top: 14px; font-size: 13.5px; color: var(--ink-mute);">成功的判断标准：4 条假设中至少 3 条被验证成立。<strong>如果不到 3 条，立刻回到方案设计阶段，不要继续扩张。</strong></p>
   </div>
 
   <div class="phase">
-    <div class="time">第 3-6 个月</div>
-    <h3>主产品扩到更多场景，校园问答开始做单校试点</h3>
-    <p>主产品从"简历 + 面试"扩展到"求职规划 + offer 比较"。开始向 1 所学校的就业指导中心推 SaaS 版本。校园问答挑一所最熟悉的学校做试点。</p>
+    <div class="time">第 3-6 个月 · 扩展</div>
+    <h3>假设成立后，把产品打开给更多用户</h3>
+    <p>前提是第 0-3 月至少验证了"付费意愿 + 岗位数据可得 + UGC 贡献意愿"这 3 条。这一阶段开放注册，主打内容从"面试 + 简历"扩展到"规划 + offer 谈判"。同时选第一所学校做校园知识 Agent 试点。</p>
     <div class="goals">
-      <div><strong>用户</strong>1 万付费用户</div>
-      <div><strong>学校端</strong>签下第 1 所合作学校</div>
-      <div><strong>试点</strong>1 所学校的问答 Agent 上线</div>
+      <div><strong>方向</strong>主产品开放注册 + 内容扩展</div>
+      <div><strong>学校</strong>1-2 所试点学校的 Agent 上线</div>
+      <div><strong>B 端</strong>开始和 3-5 所高校就业中心接触</div>
     </div>
+    <p style="margin-top: 14px; font-size: 13.5px; color: var(--ink-mute);">这一阶段不给具体用户数目标。<strong>核心指标是留存率</strong>——30 日留存能否稳定在 15% 以上（这是 C 端 AI 工具类产品的一个大致基准，具体数字需要跑出来才能确认）。</p>
   </div>
 
   <div class="phase">
-    <div class="time">第 6-12 个月</div>
-    <h3>向更多学校复制，数据闭环真正转起来</h3>
-    <p>校园问答在 3-5 所学校复制。主产品的用户反馈数据回流，让 Prompt 和模型持续变好。创始人的采访内容积累到一定规模，形成其他产品复制不了的差异。</p>
+    <div class="time">第 6-12 个月 · 规模化判断</div>
+    <h3>这一阶段的目标不是"做到 10 所学校"，是"判断该不该做"</h3>
+    <p>到这个时间点，产品应该已经能回答：单校的运营成本是多少、用户规模化是靠 C 端增长还是靠学校采购、数据闭环能不能跑通。<strong>如果这些判断清晰了，再决定是继续扩大还是收缩聚焦。</strong></p>
     <div class="goals">
-      <div><strong>学校</strong>10+ 所合作学校</div>
-      <div><strong>数据</strong>独家采访库规模化</div>
-      <div><strong>品牌</strong>在大学生群体中建立"AI 找工作"的心智</div>
+      <div><strong>判断 1</strong>C 端留存 + 付费模型是否跑通</div>
+      <div><strong>判断 2</strong>B 端高校是否签下第一个付费合同</div>
+      <div><strong>判断 3</strong>深度数据壁垒是否真实存在</div>
     </div>
+    <p style="margin-top: 14px; font-size: 13.5px; color: var(--ink-mute);"><strong>提醒：</strong>"10+ 合作高校""月活过万"这类数字，不作为这一阶段的硬目标。因为它们目前都是估算，设成硬 KPI 会逼团队做错的事。</p>
+  </div>
+
+  <div class="callout" style="margin-top: 32px;">
+    <strong>这份路线图想表达的核心：</strong>不是"我们会按时完成 X、Y、Z"，而是"我们会在每个阶段结束时，有一个明确的 go / no-go 判断"。对早期产品来说，能不能诚实地面对"这条路走不通"，比跑多快更重要。
   </div>
 </section>
 
